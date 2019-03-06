@@ -1,12 +1,14 @@
+from flasgger import Swagger
 from flask import Flask
 
 from config import app_config
-from model import db, ma
 from controller.TaxController import tax_api as tax_blueprint
+from model import db, ma
 
 
 def create_app(env_name):
     app = Flask(__name__)
+    Swagger(app)
 
     app.config.from_object(app_config[env_name])
     app.url_map.strict_slashes = False

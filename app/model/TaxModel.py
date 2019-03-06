@@ -43,13 +43,13 @@ class TaxModel(db.Model):
 
     def is_refundable(self):
         if self.tax_code == 1:
-            return True
+            return "Yes"
         elif self.tax_code == 2:
-            return False
+            return "No"
         elif self.tax_code == 3:
-            return False
+            return "No"
         else:
-            return False
+            return "No"
 
     @staticmethod
     def get_all_tax():

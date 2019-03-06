@@ -3,14 +3,12 @@ from . import ma, types
 
 
 class BillModel(object):
-    taxes_model = None
-    price_sub_total = 0
-    tax_sub_total = 0
-    grand_total = 0
-    detail = []
-
     def __init__(self, taxes_model):
         self.taxes_model = taxes_model
+        self.price_sub_total = 0
+        self.tax_sub_total = 0
+        self.grand_total = 0
+        self.detail = []
 
     def get_bill(self):
         for tax_model in self.taxes_model:
