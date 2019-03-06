@@ -3,6 +3,7 @@ from flask import Flask
 
 from config import app_config
 from controller.TaxController import tax_api as tax_blueprint
+from controller.BillController import bill_api as bill_blueprint
 from model import db, ma
 
 
@@ -17,6 +18,7 @@ def create_app(env_name):
     ma.init_app(app)
 
     app.register_blueprint(tax_blueprint, url_prefix='/api/tax')
+    app.register_blueprint(bill_blueprint, url_prefix='/api/bill')
 
     return app
 
@@ -24,5 +26,5 @@ def create_app(env_name):
 # env_name = os.getenv('FLASK_ENV')
 app = create_app('development')
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
