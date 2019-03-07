@@ -46,16 +46,16 @@ class DetailBillSchema(ma.Schema):
     name = fields.Str(required=True)
     tax_code = fields.Int(required=True)
     tax_type = fields.Str(required=True)
-    price = fields.Int(required=True)
+    price = fields.Float(required=True)
     is_refundable = fields.Str(required=True)
-    tax = fields.Int(required=True)
-    amount = fields.Int(required=True)
+    tax = fields.Float(required=True)
+    amount = fields.Float(required=True)
 
 
 class BillSchema(ma.Schema):
     class Meta:
         fields = ('price_sub_total', 'tax_sub_total', 'grand_total', 'detail')
-    price_sub_total = fields.Int(required=True)
-    tax_sub_total = fields.Int(required=True)
-    grand_total = fields.Int(required=True)
+    price_sub_total = fields.Float(required=True)
+    tax_sub_total = fields.Float(required=True)
+    grand_total = fields.Float(required=True)
     detail = fields.List(fields.Nested(DetailBillSchema(many=True)))

@@ -1,10 +1,9 @@
-from flask import request, json, Response, Blueprint
+from flask import request, Blueprint, jsonify
 from model.TaxModel import TaxSchema, TaxModel
 
 tax_api = Blueprint('tax_api', __name__)
 
 tax_schema = TaxSchema()
-taxes_schema = TaxSchema(many=True)
 
 
 @tax_api.route('/', methods=['POST'])
@@ -39,18 +38,20 @@ def post():
             description: Tax object inserted in the database
             schema:
               $ref: '#/definitions/Tax'
+          400:
+            description: Invalid input from user
     """
     req_data = request.get_json()
     data, error = tax_schema.load(req_data)
 
     if error:
-        return Response(
-            mimetype='application/json',
-            response=json.dumps(error),
-            status=400
-        )
+        return jsonify(error), 400
 
-    tax = TaxModel(data)
-    tax.save()
+    try:
+        tax = TaxModel(data)
+        tax.save()
 
-    return tax_schema.jsonify(tax)
+        return tax_schema.jsonify(tax)
+    except AssertionError as exception:
+        error = exception.message
+        return jsonify({error['field']: [error['message']]}), 400

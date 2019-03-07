@@ -1,6 +1,6 @@
+import os
 from flasgger import Swagger
 from flask import Flask
-
 from config import app_config
 from controller.TaxController import tax_api as tax_blueprint
 from controller.BillController import bill_api as bill_blueprint
@@ -23,8 +23,7 @@ def create_app(env_name):
     return app
 
 
-# env_name = os.getenv('FLASK_ENV')
-app = create_app('development')
+app = create_app(os.getenv('FLASK_ENV'))
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)

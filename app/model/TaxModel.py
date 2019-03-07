@@ -1,5 +1,6 @@
 from marshmallow import fields
 from . import db, ma
+from sqlalchemy.orm import validates
 
 
 class TaxModel(db.Model):
@@ -7,8 +8,8 @@ class TaxModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
-    tax_code = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
+    tax_code = db.Column(db.Integer, nullable=False)
 
     def __init__(self, data):
         self.name = data.get('name')
@@ -17,15 +18,6 @@ class TaxModel(db.Model):
 
     def save(self):
         db.session.add(self)
-        db.session.commit()
-
-    def update(self, data):
-        for key, item in data.items():
-            setattr(self, key, item)
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
         db.session.commit()
 
     def get_tax_number(self):
@@ -58,10 +50,21 @@ class TaxModel(db.Model):
     def __repr(self):
         return '<id {}>'.format(self.id)
 
+    @validates('tax_code')
+    def validate_tax_code(self, key, value):
+        if value not in [1, 2, 3]:
+            raise AssertionError({
+                'field': 'tax_code',
+                'message': 'Tax code is invalid. Tax code should be 1, 2, or 3'
+            })
+
+        return value
+
 
 class TaxSchema(ma.Schema):
     class Meta:
         fields = ('name', 'tax_code', 'price')
+
     id = fields.Int(dump_only=True)
     name = fields.Str(required=True)
     tax_code = fields.Int(required=True)
